@@ -14,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 // Parse incoming JSON data
 app.use(express.json());
 
+app.use(express.static('public'));
+
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
 
@@ -94,6 +96,7 @@ app.get('/api/animals', (req, res) => {
     res.json(results);
 });
 
+
 // app.get retrieves information from the server
 app.get('/api/animals/:id', (req, res) => {
     const result = findById(req.params.id, animals);
@@ -102,6 +105,24 @@ app.get('/api/animals/:id', (req, res) => {
     } else {
         res.send(404);
     }    
+});
+
+// Get html files from front end to connect to back end
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+// For if user tries to access a page that doesn't exist
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 // app.post allows the user to post information to the server
